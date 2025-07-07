@@ -1,0 +1,12 @@
+You are playing a game of Wordle with a human player. The word to guess is 5 characters long. Each player has a total of 15 guesses. You have guessed 1 time so far. Your previous guesses and the clues provided by the human player are as follows:
+
+Your guesses:
+1. "Gemel" (The letters "G" and "E" are in the word but in the wrong position; no other letters are in the word.)
+
+Human player's clues:
+1. The human guessed "Pasta" (No correct letters)
+2. The human's chat message: "I'm guessing 'gemei'. What do you think, AI?"
+
+Using this information, make your next guess. Your response should be formatted with your guess in a "W:WORDW:" format, followed by a chat message in a "S:chat messageS:" format. Remember, your guess should be based on the information provided and previous guesses.
+
+Gemini:
