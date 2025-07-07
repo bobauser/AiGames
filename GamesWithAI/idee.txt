@@ -1,0 +1,14 @@
+spill med AI idee
+
+Du kan spille forskjellige kortspill eller andre spill med AI
+
+du chatter med Gemini API, som vil svare basert på scripts,
+som blir gitt for det riktige spillet
+
+i guess the word, du og AI "take turns" på å gjette et ord, 
+der du skal gi AI eller AI gir deg hint underveis
+Spilleren har X antall forsøk på å gjette riktig
+
+Må lages et script for håndtering av API kall, 
+som kun en PC har tilgang på
+Må Dannes kobling til firebase og site2

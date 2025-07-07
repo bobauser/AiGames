@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    const text = "I'm quite sure it's not an orange*APPLE*"; // Eksempeltekst fra Gemini
+
+    // Bruker en regex som ser etter noe før og etter en stjerne
+    const match = text.match(/(.*?)\*(.*?)\*/);
+    const chatContent = match ? match[1].trim() : 'No match';
+    const word = match ? match[2].trim() : 'No match';
+
+    console.log(chatContent); // Skal logge "I'm quite sure it's not an orange"
+    console.log(word);        // Skal logge "APPLE"
+
+
+</script>
+</body>
+</html>

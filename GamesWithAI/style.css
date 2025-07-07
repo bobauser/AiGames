@@ -1,0 +1,427 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+}
+
+/*Fra Social Media App*/
+.profile-picture {
+    max-width: var(--profile-pic-size);
+    min-width: var(--profile-pic-size);
+    min-height: var(--profile-pic-size);
+    max-height: var(--profile-pic-size);
+    border-radius: 50%;
+    height: 100%;
+    width: auto;
+    background-color: white;
+    border: 2px solid black;
+}
+/**/
+
+.content {
+    display: flex;
+    height: calc(100vh - 80px); /* Adjust height considering the input section */
+    overflow-y: auto;
+    flex: 1;
+}
+
+.chat-section {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    border-right: 1px solid #dedede;
+    overflow-y: auto;
+}
+
+.word-grid {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 2rem;
+    padding: 1rem;
+}
+
+.wordRows {
+    width: auto;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin: 2rem;
+    border: 2px solid #b7b7b7;
+    border-radius: 15px;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.emptyrows {
+    font-size: 1.1rem;
+    color: gray;
+    font-style: italic;
+}
+
+.yourWord {
+    font-size: 1.2rem;
+    color: gray;
+}
+.yourWord span {
+    text-decoration: 2px underline;
+}
+
+.row {
+    display: flex;
+}
+
+.chat-message {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding: 5px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    font-size: 1.5rem;
+    opacity: 1;
+}
+
+.chat-message p {
+    font-size: 1.2rem;
+    color: #9E9E9E;
+}
+
+.chat-message.new {
+    animation: 0.5s chatShow forwards;
+}
+
+@keyframes chatShow {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+}
+
+.other {
+    justify-content: flex-start;
+    /*text-align: left;**/
+}
+.other span {
+    text-decoration: 3px underline #3E6BF2;
+}
+.you {
+    justify-content: flex-end;
+}
+.you span {
+    text-decoration: 3px underline #A0A0A0;
+}
+
+.incorrectWord {
+    text-decoration: 3px underline red !important;
+}
+
+#profileBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    border-bottom: 1px solid #dedede;
+    background-color: white; /* Eller en annen farge etter ønske */
+}
+
+.guess-input {
+    padding: 20px;
+    margin: 0 10px;
+    border: 2px solid #dedede;
+    border-radius: 15px;
+    font-size: 1.5rem;
+    transition: 0.3s;
+    outline: 2px solid transparent;
+    background-color: white;
+    width: min-content;
+
+}
+.guess-input.type-word {
+    flex-grow: 0;
+    width: min-content;
+
+}
+.guess-input.type-sentence {
+    flex-grow: 1;
+}
+.guess-input:focus {
+    outline: 2px solid transparent;
+    border-color: black; /* Endrer border til svart når elementet er i fokus */
+    border-radius: 50px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.2); /* Legger til en lett svart skygge */
+}
+
+
+.guess-input.locked{
+    border: 2px solid #8a3737;
+    box-shadow: 0 0 30px rgb(117, 54, 54, 0.2); /* Legger til en lett svart skygge */
+    border-radius: 5px;
+    color: white;
+    background-color: #a9a9a9;
+}
+
+.guess-button {
+    background: white;
+    color: #5560fe;
+    border: 2px solid #5560fe;
+    border-radius: 15px;
+    cursor: pointer;
+    white-space: nowrap;
+    font-size: 1.5rem;
+    padding: 0 2rem ;
+    transition: 0.3s;
+    width: min-content;
+}
+
+.guess-button:hover {
+    border-color: #5560fe; /* Endrer border til svart når elementet er i fokus */
+    box-shadow: 0 0 30px rgba(85, 96, 254, 0.2); /* Legger til en lett svart skygge */
+}
+
+.guess-button.locked{
+    background: #dadada;
+    color: #7d7e94;
+    border: 2px solid #7d7e94;
+}
+
+#actionButton {
+    background: white;
+    color: #0cc403;
+    border: 2px solid #0cc403;
+    border-radius: 15px;
+    cursor: pointer;
+    white-space: nowrap;
+    font-size: 1.5rem;
+    padding: 0 2rem ;
+    transition: 0.3s;
+    width: min-content;
+}
+#actionButton:hover {
+    border-color: #5560fe; /* Endrer border til svart når elementet er i fokus */
+    box-shadow: 0 0 30px rgba(85, 96, 254, 0.2); /* Legger til en lett svart skygge */
+}
+
+#chatSection {
+    margin: 2rem;
+    padding: 0 2rem;
+}
+#inputs {
+    display: flex;
+    bottom: 0;
+}
+#text-section {
+    display: flex;
+    font-size: 1.3rem;
+    align-content: center;
+    align-items: center;
+    gap: 20px;
+}
+#text-section div{
+    display: flex;
+     gap: 10px;
+}
+
+.dotRow {
+    display: flex;
+    gap: 10px;
+    width: auto;
+    transition: 0.5s;
+}
+
+.dotRow.hide {
+    transition: 0.5s;
+    opacity: 0;
+    width: 0%;
+}
+
+#statusWithBot {
+    transition: 0.5s;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    background-color: black;
+    border-radius: 50%;
+    animation: dotsFade;
+    animation-iteration-count: infinite;
+    animation-duration: 1s;
+}
+
+#dot1 {
+    animation-delay: 0s;
+}
+#dot2 {
+    animation-delay: 0.2s;
+}
+#dot3 {
+    animation-delay: 0.4s;
+}
+
+.rowwithname {
+    background-color: #F2F2F2;
+    padding: 15px;
+    border-radius: 15px;
+    border: 1px solid #D6D6D6;
+}
+.rowwithname p {
+    margin: 10px;
+}
+.rowwithname .ai {
+    color: #7C87F9;
+    text-align: left;
+}.rowwithname .human {
+    color: #4b9d5b;
+     text-align: right;
+}
+
+.game-guesses {
+    display: flex;
+    flex-direction: column;
+    color: #7C87F9;
+}
+
+.game_type, .game-player {
+    color: #7F7F7F;
+}
+
+
+
+.word-cell {
+    opacity: 0;
+    width: 50px;
+    height: 50px;
+    background: #e1e1e1;
+    border: 2px solid #d9d9d9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    border-radius: 5px;
+    margin: 0 5px;
+    animation: dotsFade 1s forwards;
+}
+
+#aiProfile {
+    width: 3rem;
+    height: 3rem;
+    border: 4px solid #66A0FF;
+    background-color: #99BAE5;
+    border-radius: 50%;
+}
+
+.correct {
+    background: #4ac032;
+    border: 2px solid #5fbb4e;
+}
+.misplaced {
+    background: #de9e24;
+    border: 2px solid #dea038;
+}
+.wrong {
+    background: #e1e1e1;
+    border: 2px solid #d9d9d9;
+}
+
+
+#word-guessed {
+    opacity: 0;
+    animation: none;
+    font-size: 1.4rem;
+    margin-left: 3rem;
+}
+#word-guessed.show {
+    animation: 0.5s word-guessed-show forwards;
+}
+#word-guessed.hide {
+    animation: 0.5s word-guessed-hide forwards;
+}
+
+
+@keyframes word-guessed-show {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+@keyframes word-guessed-hide {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}
+
+
+@keyframes showCells {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes dotsFade {
+    0% {
+        opacity: 0.9;
+        transform: translateY(0);
+    }
+    40% {
+        opacity: 0.1;
+        transform: translateY(-10px);
+    }
+    80% {
+        opacity: 0.9;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0.9;
+    }
+}
+
+/* Gjelder alle scrollbarer innenfor elementer */
+* {
+    scrollbar-width: thin; /* For Firefox */
+    scrollbar-color: #b7b7b7 transparent; /* For Firefox */
+}
+
+/* Gjelder alle scrollbarer for Chrome, Edge, og Safari */
+*::-webkit-scrollbar {
+    width: 12px;
+}
+
+*::-webkit-scrollbar-track {
+    background: transparent; /* scrollbar track */
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #b7b7b7; /* scrollbar handle */
+    border-radius: 6px; /* runde hjørner på scrollbar handle */
+    border: 3px solid transparent; /* Setter scrollbar handle "knappen" inn i track */
+}
+
+/* Skjuler scrollbar knappene */
+*::-webkit-scrollbar-button {
+    display: none;
+}

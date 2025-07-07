@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-storage.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;500;600;800&display=swap" rel="stylesheet">
+  <script src="js/cookie.js"></script>
+  <script src="js/connect.js"></script>
+  <script src="js/checkLogin.js"></script>
+  <script src="js/setUserInfos.js"></script>
+  <script src="js/logout.js"></script>
+  <script src="js/popupwindows.js"></script>
+
+  <!---ScriptsForAIgames--->
+  <script src="js/dbfunctions.js"></script>
+  <script src="js/visuals.js"></script>
+  <script src="js/gameservice.js"></script>
+
+  <script type="module" src="js/start.js"></script>
+
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gjett Ordet Spill</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<script>
+
+  const wordToGuess = "pizza"
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const guessInput = document.querySelector("#inputs .guess-input");
+    const guessForm = document.querySelector("#inputs");
+    guessInput.addEventListener("input", function() {
+      /*AIisTyping(true);
+
+      clearTimeout(guessInput.typingTimer);
+      guessInput.typingTimer = setTimeout(function() {
+        AIisTyping(false);
+      }, 3000);*/
+    });
+
+    guessForm.addEventListener("submit", function(event) {
+      // Forhindre at formen blir sendt på tradisjonell måte
+      event.preventDefault();
+      AIisTyping(false);
+      const message = guessInput.value;
+      guessInput.value = "";
+      if (guessInput.classList.contains("type-word")) {
+        typeword(message);
+        guessInput.classList.remove("type-word")
+        guessInput.classList.add("type-sentence")
+      } else {
+        createUserMessage(message, userInfo.id, userInfo.username);
+      }
+
+    });
+
+    guessInput.addEventListener("blur", function() {
+      AIisTyping(false);
+      clearTimeout(guessInput.typingTimer);
+    });
+
+    setTimeout(function () {
+      // Kaller funksjonen for å hente data
+      console.log("HELL YEAH!")
+      fetchDataAndDisplayMessages();
+      // Husk å kalle listenForAITyping et sted i koden din når alt er lastet
+      listenForAITyping();
+    }, 2000)
+  })
+
+  function AIisTyping(yes) {
+    if (yes) {
+      document.querySelector(".dotRow").classList.remove("hide")
+      document.getElementById("statusWithBot").innerText = "Bot is typing"
+    } else {
+      document.querySelector(".dotRow").classList.add("hide")
+      document.getElementById("statusWithBot").innerText = "Chat with Bot"
+    }
+  }
+
+  function getClassForLetter(guessedLetter, position) {
+    if (guessedLetter === wordToGuess[position]) {
+      return 'correct'; // Riktig bokstav på riktig posisjon
+    } else if (wordToGuess.includes(guessedLetter)) {
+      return 'misplaced'; // Riktig bokstav på feil posisjon
+    }
+    return 'wrong'; // Bokstaven er ikke i ordet
+  }
+
+  AIisTyping(false)
+</script>
+
+<header id="profileBar">
+  <div>
+    <figure id="profile-figure">
+      <img src="profilepic.png" alt="User Profile Picture" class="profile-pic"/>
+    </figure>
+    <p class="username">User Name</p>
+  </div>
+
+  <div>
+    <h1 class="game_type"></h1>
+    <h2 class="game-player"></h2>
+  </div>
+
+  <span class="logout"><button onclick="logOut()">Log out</button></span>
+</header>
+<div class="content">
+  <div class="chat-section">
+    <!-- Chat meldinger vil bli generert her -->
+    <div id="aiProfile"></div>
+    <!----<div class="chat-message other">
+      <span>AI svarte med "robot"</span>
+      <p>AI answered Robot</p>
+    </div>
+    <div class="chat-message you">
+      <span>Det er <span class="incorrectWord">feil</span>! Ordet er en matrett.</span>
+    </div>
+    <div class="chat-message other">
+      <span>AI foreslo "melon"</span>
+    </div>
+    <div class="chat-message you">
+      <span>Det er også feil!</span>
+    </div>
+    ----->
+  </div>
+
+  <div class="word-grid">
+    <h3 class="game-guesses">
+      <span class="ai"></span>
+      <span class="human"></span>
+    </h3>
+    <span class="yourWord">
+      Word to guess is:
+      <span class="word-to-guess"></span>
+    </span>
+    <div class="wordRows">
+      <span class="emptyrows">No words have been guessed yet!</span>
+    </div>
+  </div>
+</div>
+<div id="chatSection">
+  <div id="text-section">
+    <div>
+      <span class="dotRow hide">
+        <div class="dot" id="dot1"></div>
+        <div class="dot" id="dot2"></div>
+        <div class="dot" id="dot3"></div>
+      </span>
+      <span id="statusWithBot">Chat with Bot</span>
+    </div>
+    <span id="word-guessed"></span>
+    <p></p>
+  </div>
+  <form id="inputs">
+    <!-------<button id="actionButton">Do Action!</button>---->
+    <input type="text" class="guess-input type-word" placeholder="Guess A Word...">
+    <input type="submit" class="guess-button" value="Guess!">
+  </form>
+</div>
+
+</body>
+</html>

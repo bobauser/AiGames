@@ -1,0 +1,11 @@
+wordle:
+
+AI vs Human
+You decide a random length (between 3-10 characters for example) and then AI creates a word, Both player and AI is allowed to guess,
+and both has their own guess counters, and will race to guess the word
+
+VS Human
+AI creates a word, and human will try to answer. Human can decide the settings of how long, and how difficult the word should be,
+
+VS Ai
+Ai tries to guess your word, you will give the AI clues

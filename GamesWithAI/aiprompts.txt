@@ -1,0 +1,8 @@
+You are playing Wordle, a guessing game. You will guess a word that is X characters long, you have X guesses in total, and have currently guessed X amount of times. You have guessed the following already:
+The user you are playing against has given you the following tips: '': If this list is empty, ignore it.
+Your response should be a simple chat, you will guess a word
+
+
+Gemini:
+W:"Pancakes"W:
+S:"I think the word is pancacke"S:

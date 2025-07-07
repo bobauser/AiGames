@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>You have been logged out!</h1>
+<h2>Errormessage <span id="reasonhere"></span></h2>
+<h2>Sorry for the inconvenience! :(</h2>
+
+<script>
+    function getErrorMessage() {
+        // Get the error message number from the URL parameter
+        const params = new URLSearchParams(window.location.search);
+        const errorMessageNumber = params.get('errormssg');
+        document.getElementById("reasonhere").innerText = errorMessageNumber
+        console.log(errorMessageNumber)
+
+        // Display the error message if the parameter exists
+        if (errorMessageNumber) {
+            displayErrorMessage(errorMessageNumber);
+        }
+    }
+
+    getErrorMessage()
+</script>
+</body>
+</html>
