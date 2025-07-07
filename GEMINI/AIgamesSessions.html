@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-storage.js"></script>
+  <script type="importmap">
+  {
+    "imports": {
+      "@google/generative-ai": "https://esm.run/@google/generative-ai"
+    }
+  }
+</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;500;600;800&display=swap" rel="stylesheet">
+  <script src="../GamesWithAI/js/cookie.js"></script>
+  <script src="../GamesWithAI/js/connect.js"></script>
+  <script src="../GamesWithAI/js/checkLogin.js"></script>
+  <script src="../GamesWithAI/js/setUserInfos.js"></script>
+  <script src="../GamesWithAI/js/logout.js"></script>
+  <script src="../GamesWithAI/js/popupwindows.js"></script>
+
+  <!---ScriptsForAIgames--->
+  <script src="../GamesWithAI/js/dbfunctions.js"></script>
+  <script src="../GamesWithAI/js/visuals.js"></script>
+  <script src="../GamesWithAI/js/gameservice.js"></script>
+
+  <script type="module" src="../GamesWithAI/js/start.js"></script>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<style>
+  body { font-family: Arial, sans-serif; }
+  .navbar { background-color: #f2f2f2; padding: 10px; text-align: center; }
+  .container { display: flex; justify-content: space-around; padding: 20px; }
+  .session-box { width: 18%; padding: 20px; color: white; text-align: center; border-radius: 5px; }
+  .no-response { background-color: #d3d3d3; color: black; border: 1px solid #d3d3d3; }
+  .active { background-color: #4CAF50; border: 1px solid #4CAF50; }
+  .error { background-color: #ffcccb; color: black; border: 1px solid red; }
+  .inactive { background-color: #d3d3d3; color: black; border: 1px solid #d3d3d3; }
+</style>
+<script type="module">
+  import { GoogleGenerativeAI } from "@google/generative-ai";
+
+  const API_KEY = "XYXYXY";  // Husk å erstatte ... med din faktiske API-nøkkel
+  const genAI = new GoogleGenerativeAI(API_KEY);
+
+  // Fjern run funksjonen dersom den ikke brukes
+  // ...
+
+  let aigameinfo = {
+    // ... dine eksisterende aigameinfo verdier ...
+  };
+
+  let currUserId = "";
+
+  let checkTaskListInterval;
+
+  function checkAndHandleTasks() {
+    const tasklistRef = firebase.database().ref(`services/tasklist`);
+
+    tasklistRef.once('value', async (snapshot) => {
+      const tasks = snapshot.val();
+      if (tasks && Object.keys(tasks).length > 0) {
+        clearInterval(checkTaskListInterval);
+        for (const userId in tasks) {
+          if (tasks.hasOwnProperty(userId)) {
+            currUserId = userId;
+            await handleTask(userId, tasks[userId]);
+          }
+        }
+        checkTaskListInterval = setInterval(checkAndHandleTasks, 5000);
+      } else {
+        console.log('Ingen oppgaver å utføre, sjekker igjen om 5 sekunder.');
+      }
+    });
+  }
+
+  async function handleTask(userId, task) {
+    let aigamesRef;
+    try {
+      const prompt = task.prompt;
+      console.log("Her er prompten: ")
+      console.log(prompt)
+      if (!prompt) throw new Error('Ingen prompt funnet for task.');
+      aigamesRef = firebase.database().ref(`services/aigames/${userId}`);
+      await aigamesRef.child('aityping').set(true); // Start AI typing
+
+      const result = await genAI.getGenerativeModel({ model: "gemini-pro" }).generateContent(prompt);
+      const response = await result.response;
+      const text = await response.text();
+      console.log(text); // Gemini svar
+
+      // Bruker en regex som ser etter noe før og etter en stjerne
+      const match = text.match(/(.*?)\*(.*?)\*/);
+      const chatContent = match ? match[1].trim() : 'No match';
+      const word = match ? match[2].trim() : 'No match';
+
+      console.log(chatContent); // Skal logge "I'm quite sure it's not an orange"
+      console.log(word);        // Skal logge "APPLE"
+
+      await commitGuess(userId, word, chatContent); // Send userId sammen med gjett og chat
+      await firebase.database().ref(`services/tasklist/${userId}`).remove();
+    } catch (error) {
+      console.error("Error handling task for userId:", userId, error);
+    } finally {
+      if (aigamesRef) {
+        await aigamesRef.child('aityping').set(false); // Stop AI typing
+      }
+    }
+  }
+
+  async function commitGuess(userId, wordguessed, chatcontent) {
+    const gameRef = firebase.database().ref(`services/aigames/${userId}`);
+
+    const gameData = await gameRef.once('value').then(snapshot => snapshot.val());
+
+    const newChatKey = 'ch' + (Object.keys(gameData.chat).length + 1);
+    gameData.chat[newChatKey] = {
+      action: {
+        actiondescription: `AI guessed ${wordguessed}`,
+        actiontype: "guessword",
+        word: wordguessed,
+      },
+      content: chatcontent,
+      sender: "ai"
+    };
+    gameData.whosturn = "human"
+
+    const newGuessKey = 'w' + (Object.keys(gameData.guesses).length + 1);
+    gameData.guesses[newGuessKey] = {
+      ai: wordguessed,
+    };
+
+    gameData.guessesamount.ai = (gameData.guessesamount.ai || 0) + 1;
+
+    await gameRef.set(gameData);
+  }
+
+  // Husk å definere eller importere alle nødvendige funksjoner og konfigurer Firebase og genAI
+  // Start intervallet for første gang når alt er lastet og klart
+  checkTaskListInterval = setInterval(checkAndHandleTasks, 5000);
+</script>
+
+<div class="navbar">
+  All Sessions
+</div>
+
+<div class="container">
+  <div class="session-box no-response">
+    vs Alex<br>No Response
+  </div>
+  <div class="session-box active">
+    Vs Odd<br>Active
+  </div>
+  <div class="session-box error">
+    Vs Ivar<br>Error?
+  </div>
+  <div class="session-box inactive">
+    Vs Olav<br>Inactive
+  </div>
+</div>
+
+</body>
+</html>
